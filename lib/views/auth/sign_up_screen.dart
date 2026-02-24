@@ -43,7 +43,7 @@ class SignUpScreen extends StatelessWidget {
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: AppColors.whiteColor, // Pure white for better contrast
+                color: AppColors.bgColor, // Pure white for better contrast
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32.r),
                   topRight: Radius.circular(32.r),

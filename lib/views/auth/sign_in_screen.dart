@@ -7,6 +7,8 @@ import 'package:les_go_maldives/res/fonts/app_text_styles.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/views/auth/sign_up_screen.dart';
+import 'package:les_go_maldives/views/auth/forgot_password_screen.dart';
+import 'package:les_go_maldives/views/home/home_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -43,7 +45,7 @@ class SignInScreen extends StatelessWidget {
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: AppColors.whiteColor,
+                color: AppColors.bgColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32.r),
                   topRight: Radius.circular(32.r),
@@ -72,15 +74,21 @@ class SignInScreen extends StatelessWidget {
                       prefixImagePath: AppAssets.pIcon,
                       isPassword: true,
                     ),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 10.h),
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: Navigate to Forgot Password screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordScreen(),
+                            ),
+                          );
                         },
                         child: Text(
-                          'Forgot password?',
+                          'Forgot Password?',
                           style: TextStyle(
                             fontFamily: AppFonts.raleway,
                             fontWeight: FontWeight.w500, // Medium
@@ -93,7 +101,13 @@ class SignInScreen extends StatelessWidget {
                     SizedBox(height: 30.h),
                     GestureDetector(
                       onTap: () {
-                        // TODO: Implement Sign In logic
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false,
+                        );
                       },
                       child: const RoundButton(
                         title: 'Sign In',
@@ -147,7 +161,10 @@ class SignInScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          child: Text('Sign Up', style: AppTextStyles.linkText),
+                          child: Text(
+                            'Register',
+                            style: AppTextStyles.linkText,
+                          ),
                         ),
                       ],
                     ),

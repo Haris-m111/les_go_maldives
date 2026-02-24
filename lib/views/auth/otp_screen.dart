@@ -8,9 +8,11 @@ import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/views/auth/create_profile_screen.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
+import 'package:les_go_maldives/views/auth/create_password_screen.dart';
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({super.key});
+  final bool isForgotPassword;
+  const OTPScreen({super.key, this.isForgotPassword = false});
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -27,7 +29,11 @@ class _OTPScreenState extends State<OTPScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         navigator.pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const CreateProfileScreen()),
+          MaterialPageRoute(
+            builder: (context) => widget.isForgotPassword
+                ? const CreatePasswordScreen()
+                : const CreateProfileScreen(),
+          ),
           (route) => false,
         );
       }
@@ -45,7 +51,9 @@ class _OTPScreenState extends State<OTPScreen> {
           onTap: () {
             navigator.pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => const CreateProfileScreen(),
+                builder: (context) => widget.isForgotPassword
+                    ? const CreatePasswordScreen()
+                    : const CreateProfileScreen(),
               ),
               (route) => false,
             );
@@ -95,22 +103,11 @@ class _OTPScreenState extends State<OTPScreen> {
               left: 20.w,
               child: GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: Container(
+                child: Image.asset(
+                  AppAssets.backIcon,
                   width: 44.w,
                   height: 44.h,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.w),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(10.r),
-                    child: Image.asset(
-                      AppAssets.backIcon, // assets/icons/backicon.png
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -134,7 +131,7 @@ class _OTPScreenState extends State<OTPScreen> {
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
+                  color: AppColors.bgColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(32.r),
                     topRight: Radius.circular(32.r),

@@ -10,6 +10,13 @@ class AppAssets {
   static const String rightLine = '$imagePath/rightline.png';
   static const String googleBox = '$imagePath/google_box.png';
   static const String popupPic = '$imagePath/popup_pic.png';
+  static const String lgmImage = '$imagePath/lgmimage.png';
+  static const String lineImage = '$imagePath/Line.png';
+  static const String chatUs = '$imagePath/chat_to_us.png';
+  static const String callUs = '$imagePath/call_us.png';
+  static const String website = '$imagePath/website.png';
+  static const String deleteSplashLogo = '$imagePath/delete_splash_logo.png';
+  static const String warningIcon = '$imagePath/warning.png';
 
   static const String iconPath = 'assets/icons';
   static const String eIcon = '$iconPath/Eicon.png';
@@ -18,4 +25,15 @@ class AppAssets {
   static const String calIcon = '$iconPath/calicon.png';
   static const String cameraIcon = '$iconPath/cameraicon.png';
   static const String perIcon = '$iconPath/pericon.png';
+  static const String drawerIcon = '$iconPath/drawer.png';
+  static const String forwardIcon = '$iconPath/forward_icon.png';
+  static const String iconBack = '$iconPath/icon_back.png';
+  static const String profileUpdateIcon = '$iconPath/profile_update.png';
+  static const String passwordChangeIcon = '$iconPath/password_change.png';
+  static const String historyIcon = '$iconPath/history.png';
+  static const String aboutIcon = '$iconPath/about.png';
+  static const String helpIcon = '$iconPath/help.png';
+  static const String privacyIcon = '$iconPath/privacy.png';
+  static const String deleteIcon = '$iconPath/profile_delete.png';
+  static const String logoutIcon = '$iconPath/logout.png';
 }

@@ -6,6 +6,7 @@ import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/res/components/custom_text_field.dart';
 import 'package:les_go_maldives/res/components/round_button.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
+import 'package:les_go_maldives/views/home/home_screen.dart';
 
 class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({super.key});
@@ -16,16 +17,33 @@ class CreateProfileScreen extends StatefulWidget {
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
   void _showProfileCreatedPopup() {
+    final navigator = Navigator.of(context);
+
+    // Auto navigate after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        navigator.pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
+      }
+    });
+
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false, // Prevent dismissing by tapping outside
       builder: (context) {
         return SuccessPopup(
           imagePath: AppAssets.popupPic,
           title: 'Profile Created',
           description:
               'Sed dignissim nisl a vehicula fringilla. Nulla faucibus dui tellus, ut dignissim',
-          onTap: () => Navigator.pop(context),
+          onTap: () {
+            navigator.pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (route) => false,
+            );
+          },
         );
       },
     );
@@ -65,7 +83,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               bottom: 0,
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
+                  color: AppColors.bgColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(32.r),
                     topRight: Radius.circular(32.r),
