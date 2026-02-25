@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:les_go_maldives/res/colors/app_colors.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
-import 'package:les_go_maldives/res/fonts/app_fonts.dart';
+import 'package:les_go_maldives/res/fonts/app_text_styles.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
+import 'package:les_go_maldives/views/home/chatting_screen.dart';
 
-// This screen shows the user's full chat history list
-// Each item has a 3-dot menu to delete that chat
+/// This screen shows the user's full chat history list.
+/// Each item has a 3-dot menu to delete that chat.
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
 
-  // Shows a success popup after history item is deleted
+  /// Shows a success popup after a history item is deleted.
   void _showDeletedPopup(BuildContext context) {
     showDialog(
       context: context,
@@ -21,18 +22,19 @@ class HistoryScreen extends StatelessWidget {
           title: 'History Deleted',
           description: 'Your search history has been successfully cleared.',
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pop(context); // Close the popup
           },
         );
       },
     );
   }
 
-  // Shows a custom floating delete menu at the tapped position
+  /// Shows a custom floating delete menu at the tapped position.
   void _showDeleteMenu(BuildContext context, Offset tapPosition) async {
     final result = await showDialog<String>(
       context: context,
-      barrierColor: Colors.transparent, // No dark overlay behind the popup
+      barrierColor:
+          Colors.transparent, // No dark overlay behind the specific popup
       barrierDismissible: true,
       builder: (ctx) => Stack(
         children: [
@@ -58,8 +60,7 @@ class HistoryScreen extends StatelessWidget {
                       SizedBox(width: 8.w),
                       Text(
                         'Delete chat',
-                        style: TextStyle(
-                          fontFamily: AppFonts.raleway,
+                        style: AppTextStyles.buttonText.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                           color: const Color(0xFF1E1E1E),
@@ -75,7 +76,7 @@ class HistoryScreen extends StatelessWidget {
       ),
     );
 
-    // If 'delete' was selected, show the deleted popup
+    // If 'delete' was selected from the menu, show the final success popup
     if (result == 'delete' && context.mounted) {
       _showDeletedPopup(context);
     }
@@ -91,7 +92,7 @@ class HistoryScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 45.h),
-              // Header
+              // --- Header Section ---
               Row(
                 children: [
                   GestureDetector(
@@ -106,8 +107,7 @@ class HistoryScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'History',
-                        style: TextStyle(
-                          fontFamily: AppFonts.raleway,
+                        style: AppTextStyles.authHeading.copyWith(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFF1E1E1E),
@@ -115,16 +115,20 @@ class HistoryScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Placeholder to keep the title centered
                   SizedBox(width: 44.w),
                 ],
               ),
               SizedBox(height: 20.h),
+
+              // --- History List Section ---
               Expanded(
                 child: ListView.separated(
                   padding: EdgeInsets.only(bottom: 20.h),
                   itemCount: 14,
                   separatorBuilder: (context, index) => SizedBox(height: 12.h),
                   itemBuilder: (context, index) {
+                    // Mock data for display
                     final titles = [
                       'Maldives Honeymoon Planning',
                       'Looking for luxury Maldives resort',
@@ -149,7 +153,7 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  // Reusable widget for each history list item
+  /// Reusable widget for each history list item with delete menu and tap-to-chat.
   Widget _buildHistoryItem(BuildContext context, String title) {
     return Container(
       width: double.infinity,
@@ -161,23 +165,40 @@ class HistoryScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset(AppAssets.msg3, width: 30.w, height: 30.h),
-          SizedBox(width: 12.w),
           Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontFamily: AppFonts.raleway,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF1E1E1E),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                // Navigate to ChattingScreen immediately, skipping generating delay
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const ChattingScreen(skipGenerating: true),
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Image.asset(AppAssets.msg3, width: 30.w, height: 30.h),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppTextStyles.normalText.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF1E1E1E),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
+          // 3-dot menu icon for deletion
           GestureDetector(
-            // Capture exact tap position to show menu near the icon
             onTapDown: (details) {
               _showDeleteMenu(context, details.globalPosition);
             },

@@ -10,9 +10,14 @@ import 'package:les_go_maldives/views/auth/sign_up_screen.dart';
 import 'package:les_go_maldives/views/auth/forgot_password_screen.dart';
 import 'package:les_go_maldives/views/home/home_screen.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,16 +138,34 @@ class SignInScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 20.h),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Image.asset(
-                          AppAssets.googleBox,
-                          width: 80.w,
-                          height: 48.h,
-                          fit: BoxFit.contain,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Transform.translate(
+                          offset: Offset(5.w, 0),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Image.asset(
+                              AppAssets.googleBox,
+                              width: 80.w,
+                              height: 54.h,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
-                      ),
+                        Transform.translate(
+                          offset: Offset(-5.w, 0),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Image.asset(
+                              AppAssets.appleBox,
+                              width: 80.w,
+                              height: 54.h,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 20.h),
                     Row(

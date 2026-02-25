@@ -3,12 +3,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:les_go_maldives/res/colors/app_colors.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/components/custom_drawer.dart';
-import 'package:les_go_maldives/res/fonts/app_fonts.dart';
+import 'package:les_go_maldives/res/fonts/app_text_styles.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
 import 'package:les_go_maldives/views/drawer/history_screen.dart';
+import 'package:les_go_maldives/views/home/chatting_screen.dart';
+import 'package:les_go_maldives/views/home/deal_chat_screen.dart';
 
+/// The main landing screen after login.
+/// Includes a banner for Kamana, action boxes, and a chat history list.
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  /// If true, the history list is shown immediately without the loading animation.
+  final bool showHistoryImmediately;
+  const HomeScreen({super.key, this.showHistoryImmediately = false});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,20 +22,27 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isHistoryLoading = true;
+  bool _isHistoryLoading =
+      true; // State to handle the 2-second loading animation for history
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() {
-          _isHistoryLoading = false;
-        });
-      }
-    });
+    // Start history loading simulation unless showHistoryImmediately is true
+    if (widget.showHistoryImmediately) {
+      _isHistoryLoading = false;
+    } else {
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() {
+            _isHistoryLoading = false;
+          });
+        }
+      });
+    }
   }
 
+  /// Displays the success popup after a history item is deleted.
   void _showDeletedPopup() {
     showDialog(
       context: context,
@@ -52,19 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.bgColor,
-      drawer: const CustomDrawer(),
+      drawer: const CustomDrawer(), // Custom side menu
       body: SafeArea(
         child: Column(
           children: [
-            // Top Section (Header + Banner + Action Boxes + History Header)
+            // --- TOP SECTION (Header + Banner + Action Boxes + History Header) ---
             Padding(
               padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
               child: Column(
                 children: [
+                  // App Header with Drawer Icon and Logo
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Drawer Icon (Left)
                       GestureDetector(
                         onTap: () {
                           _scaffoldKey.currentState?.openDrawer();
@@ -76,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      // LGM Image (Right)
                       Image.asset(
                         AppAssets.lgmImage,
                         width: 44.w,
@@ -86,11 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   SizedBox(height: 30.h),
-                  // 3. KAMANA Banner
+
+                  // KAMANA Promo Banner
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      // Gradient Box
                       Container(
                         width: 390.w,
                         height: 134.h,
@@ -108,20 +120,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'KAMANA',
-                              style: TextStyle(
-                                fontFamily: AppFonts.raleway,
+                              style: AppTextStyles.kamanaHere.copyWith(
                                 fontSize: 24.sp,
-                                fontWeight: FontWeight.w700,
                                 color: const Color(0xFFFBFCFF),
                               ),
                             ),
                             SizedBox(height: 6.h),
                             Text(
                               'Your Maldivian concierge by Let’s Go Maldives — helping you find the right resort and book with confidence.',
-                              style: TextStyle(
-                                fontFamily: AppFonts.raleway,
+                              style: AppTextStyles.onboardingDesc.copyWith(
                                 fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
                                 color: const Color(0xFFEFEFEF),
                                 height: 1.5.h,
                               ),
@@ -129,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      // Overlapping Image
+                      // Floating girl image overlapping the banner
                       Positioned(
                         top: -25.h,
                         right: -4.w,
@@ -143,7 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   SizedBox(height: 25.h),
-                  // 4. Action Boxes Row
+
+                  // Action Boxes (Talk to Kamana & Today's Deal)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -153,25 +162,34 @@ class _HomeScreenState extends State<HomeScreen> {
                         leftIcon: AppAssets.msg1,
                         rightIcon: AppAssets.arrow,
                       ),
-                      _buildActionBox(
-                        title: "TODAY'S BEST \nDEAL",
-                        description: 'Picked just for you',
-                        leftIcon: AppAssets.msg2,
-                        rightIcon: AppAssets.arrow,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DealChatScreen(),
+                            ),
+                          );
+                        },
+                        child: _buildActionBox(
+                          title: "TODAY'S BEST \nDEAL",
+                          description: 'Picked just for you',
+                          leftIcon: AppAssets.msg2,
+                          rightIcon: AppAssets.arrow,
+                        ),
                       ),
                     ],
                   ),
                   SizedBox(height: 25.h),
-                  // 5. History Header
+
+                  // History Section Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'History',
-                        style: TextStyle(
-                          fontFamily: AppFonts.raleway,
+                        style: AppTextStyles.authHeading.copyWith(
                           fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
                           color: const Color(0xFF1E1E1E),
                         ),
                       ),
@@ -191,10 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ).createShader(bounds),
                             child: Text(
                               'See All',
-                              style: TextStyle(
-                                fontFamily: AppFonts.raleway,
+                              style: AppTextStyles.buttonText.copyWith(
                                 fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
                                 color: Colors.white,
                               ),
                             ),
@@ -206,7 +222,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // 6. History Content (Scrollable)
+
+            // --- HISTORY CONTENT (Logo while loading, List after 2s) ---
             if (_isHistoryLoading)
               Expanded(
                 child: Center(
@@ -248,6 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Helper to build the square action boxes (Talk to Kamana, etc.)
   Widget _buildActionBox({
     required String title,
     required String description,
@@ -267,10 +285,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontFamily: AppFonts.raleway,
+            style: AppTextStyles.authHeading.copyWith(
               fontSize: 20.sp,
-              fontWeight: FontWeight.w700,
               color: const Color(0xFF1E1E1E),
               height: 1.2,
             ),
@@ -278,10 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(height: 8.h),
           Text(
             description,
-            style: TextStyle(
-              fontFamily: AppFonts.raleway,
+            style: AppTextStyles.smallText.copyWith(
               fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
               color: const Color(0xFF757575),
             ),
           ),
@@ -298,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Shows the delete menu (3-dot popup) for a history item
   void _showDeleteMenu(BuildContext context, Offset tapPosition) async {
     final result = await showDialog<String>(
       context: context,
@@ -327,8 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(width: 8.w),
                       Text(
                         'Delete chat',
-                        style: TextStyle(
-                          fontFamily: AppFonts.raleway,
+                        style: AppTextStyles.buttonText.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                           color: const Color(0xFF1E1E1E),
@@ -343,11 +357,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+
     if (result == 'delete' && mounted) {
       _showDeletedPopup();
     }
   }
 
+  /// Builds an individual history list item with tap-to-chat logic
   Widget _buildHistoryItem(int index, String title) {
     return Container(
       width: double.infinity,
@@ -359,21 +375,39 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Row(
         children: [
-          Image.asset(AppAssets.msg3, width: 34.w, height: 34.h),
-          SizedBox(width: 12.w),
           Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontFamily: AppFonts.raleway,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF1E1E1E),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                // Navigate to ChattingScreen immediately, skipping generating delay
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const ChattingScreen(skipGenerating: true),
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Image.asset(AppAssets.msg3, width: 34.w, height: 34.h),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppTextStyles.normalText.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF1E1E1E),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
+          // 3-dot menu icon for deletion
           GestureDetector(
             onTapDown: (details) {
               _showDeleteMenu(context, details.globalPosition);

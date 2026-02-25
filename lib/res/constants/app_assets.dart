@@ -9,6 +9,7 @@ class AppAssets {
   static const String leftLine = '$imagePath/leftline.png';
   static const String rightLine = '$imagePath/rightline.png';
   static const String googleBox = '$imagePath/google_box.png';
+  static const String appleBox = '$imagePath/apple_box.png';
   static const String popupPic = '$imagePath/popup_pic.png';
   static const String lgmImage = '$imagePath/lgmimage.png';
   static const String lineImage = '$imagePath/Line.png';
@@ -22,6 +23,9 @@ class AppAssets {
   static const String msg3 = '$imagePath/msg3.png';
   static const String arrow = '$imagePath/arrow.png';
   static const String homeLogo = '$imagePath/home_logo.png';
+  static const String girl5 = '$imagePath/girl5.png';
+  static const String msg4 = '$imagePath/msg4.png';
+  static const String girl6 = '$imagePath/girl6.png';
 
   static const String iconPath = 'assets/icons';
   static const String eIcon = '$iconPath/Eicon.png';
