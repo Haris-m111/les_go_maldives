@@ -13,9 +13,14 @@ import 'package:les_go_maldives/views/drawer/update_password_screen.dart';
 import 'package:les_go_maldives/views/drawer/update_profile_screen.dart';
 import 'package:les_go_maldives/views/auth/sign_in_screen.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
 
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(

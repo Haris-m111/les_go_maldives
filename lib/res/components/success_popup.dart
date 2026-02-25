@@ -40,7 +40,7 @@ class SuccessPopup extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.popupHeading.copyWith(
-                  color: const Color(0xFF1E1E1E),
+                  color: AppColors.primaryBoxColor,
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w700,
                 ),

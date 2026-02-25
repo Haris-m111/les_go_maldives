@@ -102,7 +102,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       SizedBox(height: 12.h),
                       // Password field to confirm account deletion
                       CustomTextField(
-                        hintText: 'Enter password',
+                        hintText: 'Enter Password',
                         prefixImagePath: AppAssets.pIcon,
                         isPassword: true,
                       ),

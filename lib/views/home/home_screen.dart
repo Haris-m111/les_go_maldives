@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showDeletedPopup() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) {
         return SuccessPopup(
           imagePath: AppAssets.popupPic,

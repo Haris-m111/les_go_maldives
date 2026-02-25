@@ -17,11 +17,23 @@ class UpdatePasswordScreen extends StatefulWidget {
 
 class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   // Shows a popup when password is successfully updated
+  // Automatically navigates back to home after 1 second
   void _showPasswordUpdatedPopup() {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (dialogContext) {
+        // Capture the navigator of the screen
+        final navigator = Navigator.of(context);
+
+        // Start a timer to auto-pop after 1 second
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) {
+            navigator.pop(); // Close popup
+            navigator.pop(); // Go back to previous screen
+          }
+        });
+
         return SuccessPopup(
           imagePath: AppAssets.popupPic,
           title: 'Password Updated',

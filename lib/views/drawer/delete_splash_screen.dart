@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:les_go_maldives/res/colors/app_colors.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
-import 'package:les_go_maldives/views/auth/sign_in_screen.dart';
+import 'package:les_go_maldives/views/auth/sign_up_screen.dart';
 
 // This screen is shown after account deletion
 // It waits 2 seconds then navigates to the Sign In screen
@@ -23,7 +23,7 @@ class _DeleteSplashScreenState extends State<DeleteSplashScreen> {
       if (mounted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const SignInScreen()),
+          MaterialPageRoute(builder: (context) => const SignUpScreen()),
           (route) => false,
         );
       }
@@ -33,7 +33,7 @@ class _DeleteSplashScreenState extends State<DeleteSplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.bgColor,
       body: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),

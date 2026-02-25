@@ -46,7 +46,7 @@ class OnboardingScreen extends StatelessWidget {
               clipBehavior: Clip.antiAlias, // Clip children to rounded corners
               decoration: BoxDecoration(
                 color: AppColors
-                    .bgColor, // Changed to pure white for better visibility
+                    .bgColor, // Changed to pure bgcolor for better visibility
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32.r),
                   topRight: Radius.circular(32.r),

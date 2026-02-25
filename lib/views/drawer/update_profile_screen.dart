@@ -17,11 +17,23 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   // Shows a popup when profile is successfully updated
+  // Automatically navigates back to home after 1 second
   void _showProfileUpdatedPopup() {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (dialogContext) {
+        // Capture the navigator of the screen
+        final navigator = Navigator.of(context);
+
+        // Start a timer to auto-pop after 1 second
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) {
+            navigator.pop(); // Close popup
+            navigator.pop(); // Go back from screen
+          }
+        });
+
         return SuccessPopup(
           imagePath: AppAssets.popupPic,
           title: 'Profile Updated',
@@ -60,7 +72,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        'Update profile',
+                        'Update Profile',
                         style: TextStyle(
                           fontFamily: AppFonts.raleway,
                           fontSize: 20.sp,
