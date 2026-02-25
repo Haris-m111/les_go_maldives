@@ -7,6 +7,8 @@ import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/views/drawer/delete_splash_screen.dart';
 
+// This screen allows the user to permanently delete their account
+// User must enter their password to confirm deletion
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
 
@@ -55,6 +57,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               ),
               SizedBox(height: 33.h),
               // Warning Title Section
+              // Warning section: shows a warning icon and title
               Row(
                 children: [
                   Image.asset(
@@ -84,6 +87,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     children: [
                       SizedBox(height: 12.h),
                       // Warning description
+                      SizedBox(height: 12.h),
+                      // Warning description explaining what happens after deletion
                       Text(
                         "We're sorry to see you go. If you're sure you want to delete your [App] account, please be aware that this action is permanent and cannot be undone. All of your personal information, including your Name and settings, will be permanently deleted.\n\nIf you're having trouble with your account or have concerns, please reach out to us at [contact email or support page] before proceeding with the account deletion. We'd love to help you resolve any issues and keep you as a valued [app] user.",
                         style: TextStyle(
@@ -94,6 +99,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                         ),
                       ),
                       SizedBox(height: 12.h),
+                      SizedBox(height: 12.h),
+                      // Password field to confirm account deletion
                       CustomTextField(
                         hintText: 'Enter password',
                         prefixImagePath: AppAssets.pIcon,
@@ -105,6 +112,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
+                // Delete button navigates to the delete confirmation splash screen
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(

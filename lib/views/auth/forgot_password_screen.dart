@@ -64,7 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
+                  color: AppColors.bgColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(32.r),
                     topRight: Radius.circular(32.r),

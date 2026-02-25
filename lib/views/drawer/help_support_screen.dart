@@ -4,6 +4,7 @@ import 'package:les_go_maldives/res/colors/app_colors.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 
+// This screen shows contact options for help and support
 class HelpSupportScreen extends StatelessWidget {
   const HelpSupportScreen({super.key});
 
@@ -51,6 +52,7 @@ class HelpSupportScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Short description text at the top
                       Text(
                         'Vestibulum sodales pulvinar accumsan raseing rhoncus neque',
                         style: TextStyle(
@@ -61,18 +63,21 @@ class HelpSupportScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 25.h),
+                      // Chat contact option
                       _buildContactItem(
                         imagePath: AppAssets.chatUs,
                         title: 'Chat to us',
                         subtitle: 'abc@gmail.com',
                       ),
                       SizedBox(height: 20.h),
+                      // Phone call contact option
                       _buildContactItem(
                         imagePath: AppAssets.callUs,
                         title: 'Call us',
                         subtitle: '123457890',
                       ),
                       SizedBox(height: 20.h),
+                      // Website link option
                       _buildContactItem(
                         imagePath: AppAssets.website,
                         title: 'Website',
@@ -89,6 +94,7 @@ class HelpSupportScreen extends StatelessWidget {
     );
   }
 
+  // Reusable widget to show a single contact item with icon, title and subtitle
   Widget _buildContactItem({
     required String imagePath,
     required String title,
@@ -96,8 +102,10 @@ class HelpSupportScreen extends StatelessWidget {
   }) {
     return Row(
       children: [
+        // Contact icon on the left
         Image.asset(imagePath, width: 44.w, height: 44.h, fit: BoxFit.contain),
         SizedBox(width: 12.w),
+        // Title and subtitle text column
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

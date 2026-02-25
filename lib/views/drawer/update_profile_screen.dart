@@ -7,6 +7,7 @@ import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
 
+// This screen allows the user to update their profile information
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
 
@@ -15,6 +16,7 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+  // Shows a popup when profile is successfully updated
   void _showProfileUpdatedPopup() {
     showDialog(
       context: context,
@@ -72,6 +74,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ],
               ),
               SizedBox(height: 33.h),
+              // Short description text below the header
               Text(
                 'Set your profile by providing following information.',
                 textAlign: TextAlign.center,
@@ -88,6 +91,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     children: [
                       SizedBox(height: 20.h),
                       // Profile Image Section
+                      // Circular profile image with camera icon for changing photo
                       Center(
                         child: Stack(
                           children: [
@@ -105,6 +109,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             Positioned(
                               bottom: 0,
                               right: -5,
+                              // Camera icon to let user pick a new profile picture
                               child: Container(
                                 padding: EdgeInsets.all(8.r),
                                 child: Image.asset(
@@ -118,7 +123,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         ),
                       ),
                       SizedBox(height: 20.h),
-                      // Form
+                      // Form fields for name and Telegram username
                       CustomTextField(
                         hintText: 'Enter name',
                         prefixImagePath: AppAssets.perIcon,
@@ -134,6 +139,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
+                // Update button triggers the success popup
                 child: GestureDetector(
                   onTap: _showProfileUpdatedPopup,
                   child: const RoundButton(

@@ -7,6 +7,7 @@ import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
 
+// This screen allows the user to change their password
 class UpdatePasswordScreen extends StatefulWidget {
   const UpdatePasswordScreen({super.key});
 
@@ -15,6 +16,7 @@ class UpdatePasswordScreen extends StatefulWidget {
 }
 
 class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
+  // Shows a popup when password is successfully updated
   void _showPasswordUpdatedPopup() {
     showDialog(
       context: context,
@@ -27,7 +29,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
               'Sed dignissim nisl a vehicula fringilla. Nulla faucibus dui tellus, ut dignissim',
           onTap: () {
             Navigator.pop(context); // Close popup
-            Navigator.pop(context); // Go back from screen
+            Navigator.pop(context); // Go back to previous screen
           },
         );
       },
@@ -72,6 +74,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                 ],
               ),
               SizedBox(height: 30.h),
+              // Short description below the header
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -91,7 +94,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 24.h),
-                      // Form
+                      // Password input fields
                       CustomTextField(
                         hintText: 'Current Password',
                         prefixImagePath: AppAssets.pIcon,
@@ -115,6 +118,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
+                // Update button triggers the success popup
                 child: GestureDetector(
                   onTap: _showPasswordUpdatedPopup,
                   child: const RoundButton(

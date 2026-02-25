@@ -17,12 +17,18 @@ class AppAssets {
   static const String website = '$imagePath/website.png';
   static const String deleteSplashLogo = '$imagePath/delete_splash_logo.png';
   static const String warningIcon = '$imagePath/warning.png';
+  static const String msg1 = '$imagePath/msg1.png';
+  static const String msg2 = '$imagePath/msg2.png';
+  static const String msg3 = '$imagePath/msg3.png';
+  static const String arrow = '$imagePath/arrow.png';
+  static const String homeLogo = '$imagePath/home_logo.png';
 
   static const String iconPath = 'assets/icons';
   static const String eIcon = '$iconPath/Eicon.png';
   static const String pIcon = '$iconPath/Picon.png';
   static const String backIcon = '$iconPath/backicon.png';
   static const String calIcon = '$iconPath/calicon.png';
+  static const String delIcon = '$iconPath/delicon.png';
   static const String cameraIcon = '$iconPath/cameraicon.png';
   static const String perIcon = '$iconPath/pericon.png';
   static const String drawerIcon = '$iconPath/drawer.png';

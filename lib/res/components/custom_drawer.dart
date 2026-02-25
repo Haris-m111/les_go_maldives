@@ -6,6 +6,7 @@ import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/views/drawer/about_app_screen.dart';
 import 'package:les_go_maldives/views/drawer/delete_account_screen.dart';
 import 'package:les_go_maldives/views/drawer/help_support_screen.dart';
+import 'package:les_go_maldives/views/drawer/history_screen.dart';
 import 'package:les_go_maldives/views/drawer/privacy_policy_screen.dart';
 import 'package:les_go_maldives/views/drawer/terms_of_use_screen.dart';
 import 'package:les_go_maldives/views/drawer/update_password_screen.dart';
@@ -130,7 +131,13 @@ class CustomDrawer extends StatelessWidget {
                           icon: AppAssets.historyIcon,
                           title: 'History',
                           onTap: () {
-                            // Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HistoryScreen(),
+                              ),
+                            );
                           },
                         ),
                         _buildDrawerItem(

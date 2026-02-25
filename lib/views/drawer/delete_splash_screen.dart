@@ -5,6 +5,8 @@ import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/views/auth/sign_in_screen.dart';
 
+// This screen is shown after account deletion
+// It waits 2 seconds then navigates to the Sign In screen
 class DeleteSplashScreen extends StatefulWidget {
   const DeleteSplashScreen({super.key});
 
@@ -16,6 +18,7 @@ class _DeleteSplashScreenState extends State<DeleteSplashScreen> {
   @override
   void initState() {
     super.initState();
+    // Wait 2 seconds then go to Sign In and clear all previous screens
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.pushAndRemoveUntil(
@@ -37,12 +40,14 @@ class _DeleteSplashScreenState extends State<DeleteSplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // App logo displayed in the center
               Image.asset(
                 AppAssets.deleteSplashLogo,
                 width: 100.w,
                 fit: BoxFit.contain,
               ),
               SizedBox(height: 12.h),
+              // 'Account Deleted' text with gradient color effect
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
                   colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
@@ -59,6 +64,7 @@ class _DeleteSplashScreenState extends State<DeleteSplashScreen> {
                 ),
               ),
               SizedBox(height: 10.h),
+              // Subtitle message welcoming user back
               Text(
                 'You are always welcomed back, please \ncome back',
                 textAlign: TextAlign.center,

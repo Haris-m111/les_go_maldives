@@ -135,7 +135,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                     width: 100.w,
                                     height: 100.h,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFEFEFEF),
+                                      image: DecorationImage(
+                                        image: AssetImage(AppAssets.lgmImage),
+                                        fit: BoxFit.cover,
+                                      ),
                                       shape: BoxShape.circle,
                                       border: Border.all(
                                         color: const Color(0xFFC8C8C8),

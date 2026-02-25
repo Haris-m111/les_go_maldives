@@ -4,11 +4,13 @@ import 'package:les_go_maldives/res/colors/app_colors.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 
+// This screen shows the app's privacy policy text
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Placeholder text for the privacy policy content
     const String privacyText =
         'Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Maliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. \n\nAenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Maliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. \n\nAenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Maliquet. Morbi eget purus nulla. Aenean viverra ex ac enim hendrerit aliquet. Morbi eget purus nulla.';
 
@@ -23,6 +25,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               // Header
               Row(
                 children: [
+                  // Back icon to go back to previous screen
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Image.asset(
@@ -44,10 +47,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Empty box to keep the title centered
                   SizedBox(width: 44.w),
                 ],
               ),
               SizedBox(height: 33.h),
+              // Scrollable area for the privacy policy text
               Expanded(
                 child: SingleChildScrollView(
                   child: Text(

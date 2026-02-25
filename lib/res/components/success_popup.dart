@@ -28,7 +28,7 @@ class SuccessPopup extends StatelessWidget {
           width: 350.w,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
           decoration: BoxDecoration(
-            color: AppColors.whiteColor,
+            color: AppColors.bgColor,
             borderRadius: BorderRadius.circular(40.r),
           ),
           child: Column(
