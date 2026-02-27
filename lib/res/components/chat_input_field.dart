@@ -48,7 +48,7 @@ class ChatInputField extends StatelessWidget {
                 focusNode: focusNode,
                 style: AppTextStyles.inputField.copyWith(
                   fontSize: 14.sp,
-                  color: const Color(0xFF1E1E1E),
+                  color: const Color(0xFF629198),
                 ),
                 decoration: InputDecoration(
                   hintText: hintText,

@@ -9,6 +9,7 @@ class CustomTextField extends StatefulWidget {
   final IconData? prefixIcon;
   final IconData? suffixIcon;
   final bool isPassword;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     super.key,
@@ -17,6 +18,7 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.isPassword = false,
+    this.keyboardType,
   });
 
   @override
@@ -58,6 +60,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           Expanded(
             child: TextField(
               obscureText: _obscureText,
+              keyboardType: widget.keyboardType,
               style: AppTextStyles.inputField,
               decoration: InputDecoration(
                 hintText: widget.hintText,

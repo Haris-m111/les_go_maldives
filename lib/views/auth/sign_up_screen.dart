@@ -19,109 +19,122 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor,
+      // Background color jo top par nazar aayega
+      backgroundColor: AppColors.primaryBoxColor,
+      // Isay true rakhna zaroori hai taake box keyboard ke liye jagah banaye
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // FULL BACKGROUND COLOR
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: AppColors.primaryBoxColor,
-          ),
-          // First Box (Top) Image
+          // 1. IMAGE SECTION (Ye apni jagah fix rahegi)
           Positioned(
-            top: 50.h, // Image bottom at 515 (241 + 274 = 515)
-            left: 121.w,
-            child: Image.asset(
-              AppAssets.girl2,
-              height: 274.h,
-              width: 188.w,
-              fit: BoxFit.contain,
-            ),
-          ),
-          // Second Box (Bottom)
-          Positioned(
-            top: 324.h, // EXACT TOP AS REQUESTED
+            top: 50.h,
             left: 0,
             right: 0,
-            bottom: 0,
             child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                color: AppColors.bgColor, // Pure white for better contrast
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(32.r),
-                  topRight: Radius.circular(32.r),
-                ),
+              height: 274.h, // 324.h (box start) - 50.h (top) = 274.h
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                AppAssets.girl2,
+                width: 188.w,
+                fit: BoxFit.contain,
               ),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('START WITH KAMANA', style: AppTextStyles.authHeading),
-                    SizedBox(height: 8.h),
-                    Text(
-                      "We'll set up your profile as you go.",
-                      style: AppTextStyles.authSubHeading,
+            ),
+          ),
+
+          // 2. SCROLLABLE CONTENT (Neeche wala box)
+          Column(
+            children: [
+              // Ye transparent box image ke upar space banayega
+              SizedBox(height: 324.h),
+
+              // Expanded box ko baki screen cover karne deta hai
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: AppColors.bgColor, // White background
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.r),
+                      topRight: Radius.circular(32.r),
                     ),
-                    SizedBox(height: 30.h),
-                    CustomTextField(
-                      hintText: 'Enter Email Address',
-                      prefixImagePath: AppAssets.eIcon,
+                  ),
+                  child: SingleChildScrollView(
+                    // Iske andar sirf box ka content scroll hoga
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 32.h,
                     ),
-                    SizedBox(height: 15.h),
-                    CustomTextField(
-                      hintText: 'Create Password',
-                      prefixImagePath: AppAssets.pIcon,
-                      isPassword: true,
-                    ),
-                    SizedBox(height: 15.h),
-                    CustomTextField(
-                      hintText: 'Confirm Password',
-                      prefixImagePath: AppAssets.pIcon,
-                      isPassword: true,
-                    ),
-                    SizedBox(height: 30.h),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const OTPScreen(),
-                          ),
-                        );
-                      },
-                      child: const RoundButton(
-                        title: 'Sign Up',
-                        gradientColors: [
-                          AppColors.gradientStart,
-                          AppColors.gradientEnd,
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 90.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset(AppAssets.leftLine, width: 100.w),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: Text(
-                            'Or Continue',
-                            style: AppTextStyles.smallText,
+                        Text(
+                          'START WITH KAMANA',
+                          style: AppTextStyles.authHeading,
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          "We'll set up your profile as you go.",
+                          style: AppTextStyles.authSubHeading,
+                        ),
+                        SizedBox(height: 30.h),
+
+                        CustomTextField(
+                          hintText: 'Enter Email Address',
+                          prefixImagePath: AppAssets.eIcon,
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextField(
+                          hintText: 'Create Password',
+                          prefixImagePath: AppAssets.pIcon,
+                          isPassword: true,
+                        ),
+                        SizedBox(height: 15.h),
+                        CustomTextField(
+                          hintText: 'Confirm Password',
+                          prefixImagePath: AppAssets.pIcon,
+                          isPassword: true,
+                        ),
+
+                        SizedBox(height: 30.h),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OTPScreen(),
+                              ),
+                            );
+                          },
+                          child: const RoundButton(
+                            title: 'Sign Up',
+                            gradientColors: [
+                              AppColors.gradientStart,
+                              AppColors.gradientEnd,
+                            ],
                           ),
                         ),
-                        Image.asset(AppAssets.rightLine, width: 100.w),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Transform.translate(
-                          offset: Offset(5.w, 0),
+
+                        SizedBox(height: 100.h), // Spacing for "Or Continue"
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(AppAssets.leftLine, width: 100.w),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              child: Text(
+                                'Or Continue',
+                                style: AppTextStyles.smallText,
+                              ),
+                            ),
+                            Image.asset(AppAssets.rightLine, width: 100.w),
+                          ],
+                        ),
+
+                        SizedBox(height: 10.h),
+                        Center(
                           child: GestureDetector(
                             onTap: () {},
                             child: Image.asset(
@@ -132,45 +145,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        Transform.translate(
-                          offset: Offset(-5.w, 0),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Image.asset(
-                              AppAssets.appleBox,
-                              width: 80.w,
-                              height: 54.h,
-                              fit: BoxFit.contain,
+
+                        SizedBox(height: 20.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Already have an account? ',
+                              style: AppTextStyles.normalText,
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account? ',
-                          style: AppTextStyles.normalText,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignInScreen(),
+                            SizedBox(width: 6.w),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SignInScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Sign In',
+                                style: AppTextStyles.linkText,
                               ),
-                            );
-                          },
-                          child: Text('Sign In', style: AppTextStyles.linkText),
+                            ),
+                          ],
                         ),
+                        // Keyboard khulne par aakhri element ke neeche thodi space
+                        // SizedBox(height: 20.h),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),

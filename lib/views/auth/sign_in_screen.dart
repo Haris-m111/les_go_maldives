@@ -109,7 +109,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
+                            builder: (context) =>
+                                const HomeScreen(showHistoryImmediately: true),
                           ),
                           (route) => false,
                         );
@@ -153,7 +154,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                         ),
-                        Transform.translate(
+                        /*                        Transform.translate(
                           offset: Offset(-5.w, 0),
                           child: GestureDetector(
                             onTap: () {},
@@ -164,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               fit: BoxFit.contain,
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                     SizedBox(height: 20.h),

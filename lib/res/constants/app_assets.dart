@@ -26,6 +26,8 @@ class AppAssets {
   static const String girl5 = '$imagePath/girl5.png';
   static const String msg4 = '$imagePath/msg4.png';
   static const String girl6 = '$imagePath/girl6.png';
+  static const String box4 = '$imagePath/box4.png';
+  static const String icon4 = '$imagePath/icon4.png';
 
   static const String iconPath = 'assets/icons';
   static const String eIcon = '$iconPath/Eicon.png';

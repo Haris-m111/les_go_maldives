@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:les_go_maldives/res/colors/app_colors.dart';
@@ -16,6 +18,52 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? selectedImage = await _picker.pickImage(source: source);
+    if (selectedImage != null) {
+      setState(() {
+        _image = selectedImage;
+      });
+    }
+  }
+
+  void _showImagePickerSubmenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.bgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Pick from Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Capture with Camera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   // Shows a popup when profile is successfully updated
   // Automatically navigates back to home after 1 second
   void _showProfileUpdatedPopup() {
@@ -110,10 +158,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             Container(
                               width: 105.w,
                               height: 105.h,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: AssetImage(AppAssets.lgmImage),
+                                  image: _image != null
+                                      ? FileImage(File(_image!.path))
+                                            as ImageProvider
+                                      : AssetImage(AppAssets.lgmImage),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -122,12 +173,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               bottom: 0,
                               right: -5,
                               // Camera icon to let user pick a new profile picture
-                              child: Container(
-                                padding: EdgeInsets.all(8.r),
-                                child: Image.asset(
-                                  AppAssets.cameraIcon,
-                                  width: 26.w,
-                                  height: 26.h,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showImagePickerSubmenu();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(8.r),
+                                  child: Image.asset(
+                                    AppAssets.cameraIcon,
+                                    width: 26.w,
+                                    height: 26.h,
+                                  ),
                                 ),
                               ),
                             ),
@@ -144,6 +200,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       CustomTextField(
                         hintText: 'Telegram',
                         prefixImagePath: AppAssets.calIcon,
+                        keyboardType: TextInputType.number,
                       ),
                     ],
                   ),

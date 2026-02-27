@@ -15,7 +15,7 @@ class HistoryScreen extends StatelessWidget {
   void _showDeletedPopup(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) {
         return SuccessPopup(
           imagePath: AppAssets.popupPic,
@@ -160,7 +160,15 @@ class HistoryScreen extends StatelessWidget {
       height: 58.h,
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
+        color: AppColors.bgColor,
         borderRadius: BorderRadius.circular(12.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F000000), // 12% Opacity
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
         border: Border.all(color: const Color(0xFFC8C8C8), width: 1.w),
       ),
       child: Row(

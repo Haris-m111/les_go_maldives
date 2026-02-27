@@ -23,14 +23,17 @@ class OnboardingScreen extends StatelessWidget {
             color: AppColors.primaryBoxColor,
           ),
 
-          // 2. TOP IMAGE
+          // 2. TOP IMAGE - Aligned to touch the box exactly
           Positioned(
             top: 57.h,
             left: 79.w,
+            bottom:
+                MediaQuery.of(context).size.height -
+                515.h, // Touches the box at 515.h
             child: Image.asset(
               AppAssets.girl1,
-              height: 458.h,
               width: 272.w,
+              alignment: Alignment.bottomCenter,
               fit: BoxFit.contain,
             ),
           ),
@@ -70,7 +73,7 @@ class OnboardingScreen extends StatelessWidget {
                     SizedBox(height: 30.h),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SignUpScreen(),
@@ -116,7 +119,7 @@ class OnboardingScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Transform.translate(
+                        /*                        Transform.translate(
                           offset: Offset(-5.w, 0),
                           child: GestureDetector(
                             onTap: () {},
@@ -127,7 +130,7 @@ class OnboardingScreen extends StatelessWidget {
                               fit: BoxFit.contain,
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                     SizedBox(height: 30.h),
@@ -138,9 +141,10 @@ class OnboardingScreen extends StatelessWidget {
                           'Already have an account? ',
                           style: AppTextStyles.normalText,
                         ),
+                        SizedBox(width: 6.w),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const SignInScreen(),

@@ -1,9 +1,11 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:les_go_maldives/res/colors/app_colors.dart';
 import 'package:les_go_maldives/res/constants/app_assets.dart';
 import 'package:les_go_maldives/res/components/custom_drawer.dart';
 import 'package:les_go_maldives/res/fonts/app_text_styles.dart';
+import 'package:les_go_maldives/res/fonts/app_fonts.dart';
 import 'package:les_go_maldives/res/components/success_popup.dart';
 import 'package:les_go_maldives/views/drawer/history_screen.dart';
 import 'package:les_go_maldives/views/home/chatting_screen.dart';
@@ -62,204 +64,238 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: AppColors.bgColor,
-      drawer: const CustomDrawer(), // Custom side menu
-      body: SafeArea(
-        child: Column(
-          children: [
-            // --- TOP SECTION (Header + Banner + Action Boxes + History Header) ---
-            Padding(
-              padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-              child: Column(
-                children: [
-                  // App Header with Drawer Icon and Logo
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _scaffoldKey.currentState?.openDrawer();
-                        },
-                        child: Image.asset(
-                          AppAssets.drawerIcon,
-                          width: 46.w,
-                          height: 46.h,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Image.asset(
-                        AppAssets.lgmImage,
-                        width: 44.w,
-                        height: 44.h,
-                        fit: BoxFit.contain,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30.h),
-
-                  // KAMANA Promo Banner
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Container(
-                        width: 390.w,
-                        height: 134.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+    return WillPopScope(
+      onWillPop: () async {
+        // Reliable move to background via MethodChannel to avoid splash on resume
+        const platform = MethodChannel('com.example.app/background');
+        try {
+          await platform.invokeMethod('moveTaskToBack');
+        } catch (e) {
+          debugPrint("Failed to move to background: $e");
+        }
+        return false;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: AppColors.bgColor,
+        drawer: const CustomDrawer(), // Custom side menu
+        body: SafeArea(
+          child: Column(
+            children: [
+              // --- TOP SECTION (Header + Banner + Action Boxes + History Header) ---
+              Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
+                child: Column(
+                  children: [
+                    // App Header with Drawer Icon and Logo
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _scaffoldKey.currentState?.openDrawer();
+                          },
+                          child: Image.asset(
+                            AppAssets.drawerIcon,
+                            width: 46.w,
+                            height: 46.h,
+                            fit: BoxFit.contain,
                           ),
                         ),
-                        padding: EdgeInsets.fromLTRB(20.w, 18.h, 120.w, 15.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'KAMANA',
-                              style: AppTextStyles.kamanaHere.copyWith(
-                                fontSize: 24.sp,
-                                color: const Color(0xFFFBFCFF),
-                              ),
-                            ),
-                            SizedBox(height: 6.h),
-                            Text(
-                              'Your Maldivian concierge by Let’s Go Maldives — helping you find the right resort and book with confidence.',
-                              style: AppTextStyles.onboardingDesc.copyWith(
-                                fontSize: 14.sp,
-                                color: const Color(0xFFEFEFEF),
-                                height: 1.5.h,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Floating girl image overlapping the banner
-                      Positioned(
-                        top: -25.h,
-                        right: -4.w,
-                        child: Image.asset(
-                          AppAssets.girl1,
-                          width: 130.w,
-                          height: 159.h,
+                        Image.asset(
+                          AppAssets.lgmImage,
+                          width: 44.w,
+                          height: 44.h,
                           fit: BoxFit.contain,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25.h),
+                      ],
+                    ),
+                    SizedBox(height: 30.h),
 
-                  // Action Boxes (Talk to Kamana & Today's Deal)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildActionBox(
-                        title: 'Talk to \nKamana',
-                        description: 'Local help, anytime',
-                        leftIcon: AppAssets.msg1,
-                        rightIcon: AppAssets.arrow,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DealChatScreen(),
+                    // KAMANA Promo Banner
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 390.w,
+                          height: 134.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
                             ),
-                          );
-                        },
-                        child: _buildActionBox(
-                          title: "TODAY'S BEST \nDEAL",
-                          description: 'Picked just for you',
-                          leftIcon: AppAssets.msg2,
-                          rightIcon: AppAssets.arrow,
+                          ),
+                          padding: EdgeInsets.fromLTRB(20.w, 18.h, 120.w, 15.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'KAMANA',
+                                style: AppTextStyles.kamanaHere.copyWith(
+                                  fontSize: 24.sp,
+                                  color: const Color(0xFFFBFCFF),
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                              Text(
+                                'Your Maldivian concierge by Let’s Go Maldives — helping you find the right resort and book with confidence.',
+                                style: AppTextStyles.onboardingDesc.copyWith(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFFEFEFEF),
+                                  height: 1.5.h,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25.h),
+                        // Floating girl image overlapping the banner
+                        Positioned(
+                          top: -25.h,
+                          right: -4.w,
+                          child: Image.asset(
+                            AppAssets.girl1,
+                            width: 130.w,
+                            height: 159.h,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25.h),
 
-                  // History Section Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'History',
-                        style: AppTextStyles.authHeading.copyWith(
-                          fontSize: 18.sp,
-                          color: const Color(0xFF1E1E1E),
-                        ),
-                      ),
-                      if (!_isHistoryLoading)
+                    // Action Boxes (Talk to Kamana & Today's Deal)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const HistoryScreen(),
+                                builder: (context) => const ChattingScreen(),
                               ),
                             );
                           },
-                          child: ShaderMask(
-                            shaderCallback: (bounds) => const LinearGradient(
-                              colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
-                            ).createShader(bounds),
-                            child: Text(
-                              'See All',
-                              style: AppTextStyles.buttonText.copyWith(
-                                fontSize: 14.sp,
-                                color: Colors.white,
+                          child: _buildActionBox(
+                            title: 'Talk to \nKamana',
+                            description: 'Local help, anytime',
+                            leftIcon: AppAssets.msg1,
+                            rightIcon: AppAssets.arrow,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DealChatScreen(),
+                              ),
+                            );
+                          },
+                          child: _buildActionBox(
+                            title: "TODAY'S BEST \nDEAL",
+                            description: 'Picked just for you',
+                            leftIcon: AppAssets.msg2,
+                            rightIcon: AppAssets.arrow,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'History',
+                          style: AppTextStyles.authHeading.copyWith(
+                            fontSize: 18.sp,
+                            color: const Color(0xFF1E1E1E),
+                          ),
+                        ),
+                        if (!_isHistoryLoading)
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HistoryScreen(),
+                                ),
+                              );
+                            },
+                            child: ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
+                              ).createShader(bounds),
+                              child: Text(
+                                'See All',
+                                style: AppTextStyles.buttonText.copyWith(
+                                  fontSize: 14.sp,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
+                      ],
+                    ),
+                    SizedBox(height: 15.h),
+                  ],
+                ),
+              ),
+
+              // --- HISTORY CONTENT (Logo while loading, List after 2s) ---
+              if (_isHistoryLoading)
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        AppAssets.homeLogo,
+                        width: 260.w,
+                        height: 205.h,
+                        fit: BoxFit.contain,
+                      ),
+                      SizedBox(height: 10.h),
+                      Text(
+                        'No History yet!',
+                        style: TextStyle(
+                          fontFamily: AppFonts.raleway,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                          color: const Color(0xFF777777),
                         ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 15.h),
-                ],
-              ),
-            ),
-
-            // --- HISTORY CONTENT (Logo while loading, List after 2s) ---
-            if (_isHistoryLoading)
-              Expanded(
-                child: Center(
-                  child: Image.asset(
-                    AppAssets.homeLogo,
-                    width: 260.w,
-                    height: 205.h,
-                    fit: BoxFit.contain,
+                )
+              else
+                Expanded(
+                  child: ListView.separated(
+                    padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
+                    itemCount: 14,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: 12.h),
+                    itemBuilder: (context, index) {
+                      final titles = [
+                        'Maldives Honeymoon Planning',
+                        'Looking for luxury Maldives resort',
+                        'Help me Book a Maldives Trip',
+                        'Which Maldives resort suite Us',
+                        'Planning a family vacation',
+                        'Best water villas in Maldives',
+                        'Budget friendly island resorts',
+                        'Scuba diving spots in Maldives',
+                      ];
+                      return _buildHistoryItem(
+                        index,
+                        titles[index % titles.length],
+                      );
+                    },
                   ),
                 ),
-              )
-            else
-              Expanded(
-                child: ListView.separated(
-                  padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
-                  itemCount: 14,
-                  separatorBuilder: (context, index) => SizedBox(height: 12.h),
-                  itemBuilder: (context, index) {
-                    final titles = [
-                      'Maldives Honeymoon Planning',
-                      'Looking for luxury Maldives resort',
-                      'Help me Book a Maldives Trip',
-                      'Which Maldives resort suite Us',
-                      'Planning a family vacation',
-                      'Best water villas in Maldives',
-                      'Budget friendly island resorts',
-                      'Scuba diving spots in Maldives',
-                    ];
-                    return _buildHistoryItem(
-                      index,
-                      titles[index % titles.length],
-                    );
-                  },
-                ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -299,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: const Color(0xFF757575),
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -370,7 +406,15 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 58.h,
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
+        color: AppColors.bgColor,
         borderRadius: BorderRadius.circular(12.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F000000), // 12% Opacity
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
         border: Border.all(color: const Color(0xFFC8C8C8), width: 1.w),
       ),
       child: Row(

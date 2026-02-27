@@ -70,7 +70,15 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
               top: 73.h,
               left: 20.w,
               child: GestureDetector(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignInScreen(),
+                    ),
+                    (route) => false,
+                  );
+                },
                 child: Image.asset(
                   AppAssets.backIcon,
                   width: 44.w,

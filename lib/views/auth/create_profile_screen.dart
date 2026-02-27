@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:les_go_maldives/res/colors/app_colors.dart';
@@ -16,6 +19,52 @@ class CreateProfileScreen extends StatefulWidget {
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? selectedImage = await _picker.pickImage(source: source);
+    if (selectedImage != null) {
+      setState(() {
+        _image = selectedImage;
+      });
+    }
+  }
+
+  void _showImagePickerSubmenu() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.bgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Camera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _showProfileCreatedPopup() {
     final navigator = Navigator.of(context);
 
@@ -51,149 +100,170 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: AppColors.bgColor,
-        resizeToAvoidBottomInset: true,
-        body: Stack(
-          children: [
-            // 1. FULL BACKGROUND COLOR
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: AppColors.primaryBoxColor,
-            ),
-            // 2. TOP IMAGE
-            Positioned(
-              top: 60.h,
-              left: 121.w,
-              child: Image.asset(
-                AppAssets.girl4,
-                height: 234.h,
-                width: 205.w,
-                fit: BoxFit.contain,
+    return WillPopScope(
+      onWillPop: () async {
+        // Reliable move to background via MethodChannel to avoid splash on resume
+        const platform = MethodChannel('com.example.app/background');
+        try {
+          await platform.invokeMethod('moveTaskToBack');
+        } catch (e) {
+          debugPrint("Failed to move to background: $e");
+        }
+        return false;
+      },
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: AppColors.bgColor,
+          resizeToAvoidBottomInset: true,
+          body: Stack(
+            children: [
+              // 1. FULL BACKGROUND COLOR
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: AppColors.primaryBoxColor,
               ),
-            ),
-            // 3. BOTTOM BOX
-            Positioned(
-              top: 294.h, // FIXED TOP AS REQUESTED
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.bgColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32.r),
-                    topRight: Radius.circular(32.r),
-                  ),
+              // 2. TOP IMAGE
+              Positioned(
+                top: 60.h,
+                left: 121.w,
+                child: Image.asset(
+                  AppAssets.girl4,
+                  height: 234.h,
+                  width: 205.w,
+                  fit: BoxFit.contain,
                 ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
+              ),
+              // 3. BOTTOM BOX
+              Positioned(
+                top: 294.h, // FIXED TOP AS REQUESTED
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.bgColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.r),
+                      topRight: Radius.circular(32.r),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                            vertical: 32.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Let's set up your profile",
+                                      style: TextStyle(
+                                        fontFamily: AppFonts.raleway,
+                                        fontSize: 24.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF1E1E1E),
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      'Just a few details — so I can guide you better.',
+                                      style: TextStyle(
+                                        fontFamily: AppFonts.raleway,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xFF343434),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              // PROFILE PICTURE BOX
+                              Center(
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 100.w,
+                                      height: 100.h,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: _image != null
+                                              ? FileImage(File(_image!.path))
+                                                    as ImageProvider
+                                              : AssetImage(AppAssets.lgmImage),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: const Color(0xFFC8C8C8),
+                                          width: 1.w,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 2,
+                                      right: 2,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showImagePickerSubmenu();
+                                        },
+                                        child: Image.asset(
+                                          AppAssets.cameraIcon,
+                                          width: 30.sp,
+                                          height: 30.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              // TEXT FIELDS
+                              CustomTextField(
+                                hintText: 'Enter Name',
+                                prefixImagePath: AppAssets.perIcon,
+                              ),
+                              SizedBox(height: 16.h),
+                              CustomTextField(
+                                hintText: 'Telegram',
+                                prefixImagePath: AppAssets.calIcon,
+                                keyboardType: TextInputType.number,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 20.w,
-                          vertical: 32.h,
+                          vertical: 15.h,
                         ),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Let's set up your profile",
-                                    style: TextStyle(
-                                      fontFamily: AppFonts.raleway,
-                                      fontSize: 24.sp,
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF1E1E1E),
-                                    ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    'Just a few details — so I can guide you better.',
-                                    style: TextStyle(
-                                      fontFamily: AppFonts.raleway,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: const Color(0xFF343434),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            // PROFILE PICTURE BOX
-                            Center(
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: 100.w,
-                                    height: 100.h,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(AppAssets.lgmImage),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: const Color(0xFFC8C8C8),
-                                        width: 1.w,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 2,
-                                    right: 2,
-                                    child: Image.asset(
-                                      AppAssets.cameraIcon,
-                                      width: 30.sp,
-                                      height: 30.sp,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            // TEXT FIELDS
-                            CustomTextField(
-                              hintText: 'Enter Name',
-                              prefixImagePath: AppAssets.perIcon,
-                            ),
-                            SizedBox(height: 16.h),
-                            CustomTextField(
-                              hintText: 'Telegram',
-                              prefixImagePath: AppAssets.calIcon,
-                            ),
-                          ],
+                        child: GestureDetector(
+                          onTap: _showProfileCreatedPopup,
+                          child: const RoundButton(
+                            title: 'Create Profile',
+                            gradientColors: [
+                              AppColors.gradientStart,
+                              AppColors.gradientEnd,
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20.w,
-                        vertical: 15.h,
-                      ),
-                      child: GestureDetector(
-                        onTap: _showProfileCreatedPopup,
-                        child: const RoundButton(
-                          title: 'Create Profile',
-                          gradientColors: [
-                            AppColors.gradientStart,
-                            AppColors.gradientEnd,
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

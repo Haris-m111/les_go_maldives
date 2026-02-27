@@ -13,7 +13,10 @@ class DealChatScreen extends StatefulWidget {
   State<DealChatScreen> createState() => _DealChatScreenState();
 }
 
-class _DealChatScreenState extends State<DealChatScreen> {
+class _DealChatScreenState extends State<DealChatScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _floatController;
+  late Animation<double> _floatAnimation;
   // Controls whether the chat input mode is active or suggestion mode is visible
   bool _isChatActive = false;
   final TextEditingController _chatController = TextEditingController();
@@ -23,6 +26,16 @@ class _DealChatScreenState extends State<DealChatScreen> {
   @override
   void initState() {
     super.initState();
+    // Float animation for msg4
+    _floatController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+
+    _floatAnimation = Tween<double>(begin: 0.97, end: 1.03).animate(
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
+    );
+
     // Monitor text changes to update the send icon's color state
     _chatController.addListener(() {
       setState(() {
@@ -33,6 +46,7 @@ class _DealChatScreenState extends State<DealChatScreen> {
 
   @override
   void dispose() {
+    _floatController.dispose();
     _chatController.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -55,9 +69,8 @@ class _DealChatScreenState extends State<DealChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      // Prevents msg4/content from shifting poorly when keyboard opens.
-      // Handled manually via viewInsets.bottom for the input bar.
-      resizeToAvoidBottomInset: false,
+      // Enable keyboard resizing to allow content to scroll up
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
           children: [
@@ -105,53 +118,36 @@ class _DealChatScreenState extends State<DealChatScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                // Suggestions List
-                Column(
-                  children: [
-                    if (!_isChatActive) ...[
-                      // Suggestion boxes that navigate directly to ChattingScreen
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChattingScreen(),
+                // Suggestions List - Now vertically scrollable
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        // Always show the 4 suggestions as requested: "wo jo 4 han wohi show hon"
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ChattingScreen(),
+                            ),
+                          ),
+                          child: _buildSuggestionBox(
+                            'Looking for luxury Madives resort',
                           ),
                         ),
-                        child: _buildSuggestionBox(
-                          'Looking for luxury Madives resort',
-                        ),
-                      ),
-                      SizedBox(height: 10.h),
-                      _buildSuggestionBox('Plan a maldives honeymoon'),
-                      SizedBox(height: 10.h),
-                      _buildSuggestionBox('Help me Book a Maldives Trip'),
-                      SizedBox(height: 10.h),
-                      _buildSuggestionBox('Which Maldives resort suite Us?'),
-                    ] else ...[
-                      // Chat Mode specific suggestions
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChattingScreen(),
-                          ),
-                        ),
-                        child: _buildSuggestionBox('Plan a maldives honeymoon'),
-                      ),
-                      SizedBox(height: 10.h),
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ChattingScreen(),
-                          ),
-                        ),
-                        child: _buildSuggestionBox(
-                          'Looking for luxury Madives resort',
-                        ),
-                      ),
-                    ],
-                  ],
+                        SizedBox(height: 10.h),
+                        _buildSuggestionBox('Plan a maldives honeymoon'),
+                        SizedBox(height: 10.h),
+                        _buildSuggestionBox('Help me Book a Maldives Trip'),
+                        SizedBox(height: 10.h),
+                        _buildSuggestionBox('Which Maldives resort suite Us?'),
+                        SizedBox(
+                          height: _isChatActive ? 80.h : 180.h,
+                        ), // Adjusted space for floating button or input bar
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -165,14 +161,41 @@ class _DealChatScreenState extends State<DealChatScreen> {
                 right: 0,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _isChatActive = true);
-                    _focusNode.requestFocus();
+                    setState(() {
+                      _isChatActive = true;
+                    });
+                    // Request focus after the layout has updated to show the input bar
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _focusNode.requestFocus();
+                    });
                   },
-                  child: Image.asset(
-                    AppAssets.msg4,
-                    width: 70.51.w,
-                    height: 70.51.h,
-                    fit: BoxFit.contain,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Background Box - Animates Scale
+                      AnimatedBuilder(
+                        animation: _floatAnimation,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _floatAnimation.value,
+                            child: child,
+                          );
+                        },
+                        child: Image.asset(
+                          AppAssets.box4,
+                          width: 70.w,
+                          height: 70.h,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      // Foreground Icon - Remains Fixed
+                      Image.asset(
+                        AppAssets.icon4,
+                        width: 32.w, // Adjust size as needed
+                        height: 32.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -180,7 +203,7 @@ class _DealChatScreenState extends State<DealChatScreen> {
             // Persistent Chat Input Bar visible only when chat IS active
             if (_isChatActive)
               Positioned(
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
+                bottom: 16.h,
                 left: 0,
                 right: 0,
                 child: _buildChatInputBar(),
@@ -254,30 +277,41 @@ class _DealChatScreenState extends State<DealChatScreen> {
                 ),
                 style: AppTextStyles.inputField.copyWith(
                   fontSize: 14.sp,
-                  color: const Color(0xFF1E1E1E),
+                  color: const Color(0xFF629198),
                 ),
               ),
             ),
             SizedBox(width: 8.w),
-            // Send indicator with gradient color logic
-            _hasText
-                ? ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
-                    child: Icon(
+            GestureDetector(
+              onTap: () {
+                if (_hasText) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ChattingScreen(),
+                    ),
+                  );
+                }
+              },
+              child: _hasText
+                  ? ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [Color(0xFF369CAC), Color(0xFF096E7E)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds),
+                      child: Icon(
+                        Icons.send_rounded,
+                        size: 24.sp,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Icon(
                       Icons.send_rounded,
                       size: 24.sp,
-                      color: Colors.white,
+                      color: const Color(0xFFA1A1AA),
                     ),
-                  )
-                : Icon(
-                    Icons.send_rounded,
-                    size: 24.sp,
-                    color: const Color(0xFFA1A1AA),
-                  ),
+            ),
           ],
         ),
       ),
